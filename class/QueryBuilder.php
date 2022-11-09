@@ -9,15 +9,16 @@ class QueryBuilder {
     
     private string $query;
 
-    /**
-     * @return void
-     */
+    public function __construct() {
+        $this->query = "";
+    }
+
     public function select(array $fields, array $alias = null) {
         $this->query .= "SELECT ";
         $count = count($fields);
         for($i = 0; $i < $count; $i++) {
 
-            $this->query .= $field[$i];
+            $this->query .= $fields[$i];
 
             if($alias != null && array_key_exists($i, $alias)) {
                 $this->query .= " AS " . $alias[$i];
@@ -36,6 +37,26 @@ class QueryBuilder {
         } 
     }
 
+    public function innerJoin(string $table, string $alias = null, string $on = null) {
+
+    }
+
+    public function leftJoin(string $table, string $alias = null, string $on = null) {
+        
+    }
+
+    public function rightJoin(string $table, string $alias = null, string $on = null) {
+        
+    }
+
+    public function fullJoin(string $table, string $alias = null) {
+        
+    }
+
+    public function naturalJoin(string $table, string $alias = null) {
+        
+    }
+
     public function where(string $field, string $operator = null, string $value = null) {
         $this->query .= " WHERE " . $field;
 
@@ -46,6 +67,14 @@ class QueryBuilder {
         if($value != null) {
             $this->query .= " " . $value . " ";
         }
+    }
+
+    public function orderBy(string $fields) {
+        $this->query .= " ORDER BY " . $fields;
+    }
+
+    public function groupBy(string $fields) {
+        $this->query .= " GROUP BY " . $fields;
     }
 
     /**
