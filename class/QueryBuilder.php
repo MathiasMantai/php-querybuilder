@@ -18,7 +18,7 @@ class QueryBuilder {
      * $alias = ["f1", "f2"]
      * will result in the following query: SELECT field1 AS f1, field2 AS f2
      */
-    public function select(array $fields, array $alias = null) {
+    public function select(array $fields, array $alias = null) : void {
         $this->query .= "SELECT ";
         $count = count($fields);
         for($i = 0; $i < $count; $i++) {
@@ -35,34 +35,34 @@ class QueryBuilder {
         }       
     }
 
-    public function from(string $table, string $alias = null) {
+    public function from(string $table, string $alias = null) : void {
         $this->query .= " FROM " . $table;
         if($alias != null) {
             $this->query .= " AS " . $alias;
         } 
     }
 
-    public function innerJoin(string $table, string $alias = null, string $on = null) {
+    public function innerJoin(string $table, string $alias = null, string $on = null) : void {
 
     }
 
-    public function leftJoin(string $table, string $alias = null, string $on = null) {
+    public function leftJoin(string $table, string $alias = null, string $on = null) : void {
         
     }
 
-    public function rightJoin(string $table, string $alias = null, string $on = null) {
+    public function rightJoin(string $table, string $alias = null, string $on = null) : void {
         
     }
 
-    public function fullJoin(string $table, string $alias = null) {
+    public function fullJoin(string $table, string $alias = null) : void {
         
     }
 
-    public function naturalJoin(string $table, string $alias = null) {
+    public function naturalJoin(string $table, string $alias = null) : void {
         
     }
 
-    public function where(string $field, string $operator = null, string $value = null) {
+    public function where(string $field, string $operator = null, string $value = null) : void {
         $this->query .= " WHERE " . $field;
 
         if($operator != null) {
@@ -74,18 +74,18 @@ class QueryBuilder {
         }
     }
 
-    public function orderBy(string $fields) {
+    public function orderBy(string $fields) : void {
         $this->query .= " ORDER BY " . $fields;
     }
 
-    public function groupBy(string $fields) {
+    public function groupBy(string $fields) : void {
         $this->query .= " GROUP BY " . $fields;
     }
 
     /**
      * Return the query as a string
      */
-    public function getQuery() {
+    public function getQuery() : string {
         return $this->query;
     }
 }
