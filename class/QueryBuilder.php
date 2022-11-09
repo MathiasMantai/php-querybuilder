@@ -13,6 +13,11 @@ class QueryBuilder {
         $this->query = "";
     }
 
+    /**
+     * $fields = ["field1", "field2"]
+     * $alias = ["f1", "f2"]
+     * will result in the following query: SELECT field1 AS f1, field2 AS f2
+     */
     public function select(array $fields, array $alias = null) {
         $this->query .= "SELECT ";
         $count = count($fields);
