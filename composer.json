@@ -1,0 +1,8 @@
+{
+    "name": "phpquerybuilder/phpquerybuilder",
+    "description": "A simple php query builder",
+    "license": "GPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {"QueryBuilder": "class/"}
+    }
+}
