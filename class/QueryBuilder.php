@@ -29,6 +29,28 @@ class QueryBuilder {
         }       
     }
 
+    public function from(string $table, string $alias = null) {
+        $this->query .= " FROM " . $table;
+        if($alias != null) {
+            $this->query .= " AS " . $alias;
+        } 
+    }
+
+    public function where(string $field, string $operator = null, string $value = null) {
+        $this->query .= " WHERE " . $field;
+
+        if($operator != null) {
+            $this->query .= " " . $operator . " ";
+        }
+
+        if($value != null) {
+            $this->query .= " " . $value . " ";
+        }
+    }
+
+    /**
+     * Return the query as a string
+     */
     public function getQuery() {
         return $this->query;
     }
