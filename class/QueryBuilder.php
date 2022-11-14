@@ -6,7 +6,7 @@
  * (at your option) any later version.
  */
 
-namespace QueryBuilder\QueryBuilder;
+namespace Classes\QueryBuilder;
 
 class QueryBuilder {
     
