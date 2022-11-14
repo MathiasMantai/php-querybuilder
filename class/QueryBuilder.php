@@ -40,6 +40,11 @@ class QueryBuilder {
         } 
     }
 
+    /**
+     *  @return void
+     *  @param string $table
+     *  @param string $alias
+     */
     public function from(string $table, string $alias = null) : void {
         $this->query .= " FROM " . $table;
 
@@ -48,6 +53,12 @@ class QueryBuilder {
         }
     }
 
+    /**
+     *  @return void
+     *  @param string $table
+     *  @param string $alias
+     *  @param string $on
+     */
     public function innerJoin(string $table, string $alias = null, string $on = null) : void {
         $this->query .= " INNER JOIN " . $table;
 
