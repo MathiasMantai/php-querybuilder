@@ -4,10 +4,10 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
-require '../class/QueryBuilder.php';
+
 use Classes\QueryBuilder;
 
-$builder = new QueryBuilder\QueryBuilder();
+$builder = new QueryBuilder();
 
 $builder->select(["testField1", "testField2"], ["tf1", "tf2"]);
 $builder->from("testtable", "tt");
