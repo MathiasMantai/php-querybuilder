@@ -1,5 +1,5 @@
 {
-    "name": "phpquerybuilder/phpquerybuilder",
+    "name": "mathiasmantai/php-querybuilder",
     "type": "library",
     "description": "A simple php query builder",
     "license": "GPL-3.0-or-later",
