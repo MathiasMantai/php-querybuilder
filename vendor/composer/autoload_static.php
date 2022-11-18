@@ -7,21 +7,20 @@ namespace Composer\Autoload;
 class ComposerStaticInit5196e3aa59037dd85f6557ab711a74b2
 {
     public static $prefixLengthsPsr4 = array (
-        'C' => 
+        'Q' => 
         array (
-            'Classes\\' => 8,
+            'QueryBuilder\\' => 13,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Classes\\' => 
+        'QueryBuilder\\' => 
         array (
             0 => __DIR__ . '/../..' . '/class',
         ),
     );
 
     public static $classMap = array (
-        'Classes\\QueryBuilder' => __DIR__ . '/../..' . '/class/QueryBuilder.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
