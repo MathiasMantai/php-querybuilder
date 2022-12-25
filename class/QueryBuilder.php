@@ -23,7 +23,7 @@ class QueryBuilder {
      * $fields = ["field1", "field2"]
      * $alias = ["f1", "f2"]
      * will result in the following query: SELECT field1 AS f1, field2 AS f2
-     */
+     */    
     public function select(array $fields, array $alias = null) : void {
         $this->query .= "SELECT ";
 
@@ -185,6 +185,10 @@ class QueryBuilder {
      */
     public function getQuery() : string {
         return $this->query;
+    }
+
+    public function clearQuery() : void {
+        $this->query = null;
     }
 
     /**
