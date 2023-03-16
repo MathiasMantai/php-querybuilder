@@ -190,18 +190,4 @@ class QueryBuilder {
     public function clearQuery() : void {
         $this->query = null;
     }
-
-    /**
-     * @return void
-     */
-    public function lineBreak() : void {
-        $this->query .= "\n";
-    }
-
-    /**
-     * @return void
-     */
-    public function lineBreakHTML() : void {
-        $this->query .= "<br>";
-    }
 }
