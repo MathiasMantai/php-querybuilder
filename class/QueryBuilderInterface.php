@@ -4,6 +4,21 @@ interface QueryBuilderInterface
 {
 
     /**
+     * 
+     */
+    public function create();
+
+    /**
+     * 
+     */
+    public function alter();
+
+    /**
+     * 
+     */
+    public function drop();
+
+    /**
      * @param array $columns - columns to select
      */
     public function select(array $columns);
