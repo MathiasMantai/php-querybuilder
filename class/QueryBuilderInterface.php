@@ -2,6 +2,7 @@
 
 interface QueryBuilderInterface 
 {
+
     /**
      * @param array $columns - columns to select
      */
@@ -48,6 +49,24 @@ interface QueryBuilderInterface
     public function orderBy(string $orderBy);
 
     /**
+     * @param string $table   - table to insert into
+     * @param array  $columns - columns to insert
+     * @param array  $values  - values to insert 
+     */
+    public function insert(string $table, array $columns, array $values);
+
+    /**
+     * @param string $table  - table to update
+     * @param array  $update - columns to update in a 2d array. structure should be [x][0] = column and [x][1] = value
+     */
+    public function update(string $table, array $updateDate);
+
+    /**
+     * @param string $table - table to delete from
+     */
+    public function delete(string $table);
+
+    /**
      * @param string $table - table to join
      * @param string $on    - on clause for join
      */
@@ -58,4 +77,9 @@ interface QueryBuilderInterface
      * @param string $on    - on clause for join
      */
     public function setQuery();
+
+    /**
+     * empty the query 
+     */
+    public function emptyQuery();
 }
