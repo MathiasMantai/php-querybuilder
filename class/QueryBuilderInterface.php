@@ -1,5 +1,7 @@
 <?php
 
+namespace QueryBuilder;
+
 interface QueryBuilderInterface 
 {
 
