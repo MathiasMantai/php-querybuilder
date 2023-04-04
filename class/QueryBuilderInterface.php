@@ -1,6 +1,6 @@
 <?php
 
-namespace QueryBuilder;
+namespace Mathiasmantai\QueryBuilder;
 
 interface QueryBuilderInterface 
 {
