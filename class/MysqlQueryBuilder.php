@@ -6,7 +6,7 @@
  * (at your option) any later version.
  */
 
-namespace Mathiasmantai\QueryBuilder;
+namespace Mmantai\QueryBuilder;
 
 class MySQLQueryBuilder implements QueryBuilderInterface {
     
