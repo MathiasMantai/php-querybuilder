@@ -8,17 +8,17 @@ interface QueryBuilderInterface
     /**
      * 
      */
-    public function create();
+    public function create(array $data);
 
     /**
      * 
      */
-    public function alter();
+    public function alter(string $table, string $alteration);
 
     /**
      * 
      */
-    public function drop();
+    public function drop(string $table);
 
     /**
      * @param array $columns - columns to select
@@ -88,12 +88,6 @@ interface QueryBuilderInterface
      * @param string $on    - on clause for join
      */
     public function getQuery();
-
-    /**
-     * @param string $table - table to join
-     * @param string $on    - on clause for join
-     */
-    public function setQuery();
 
     /**
      * empty the query 

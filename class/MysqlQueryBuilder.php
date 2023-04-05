@@ -17,6 +17,30 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
     }
 
     /**
+     * 
+     */
+    public function create(array $data)
+    {
+
+    }
+
+    /**
+     * 
+     */
+    public function alter(string $table, string $alteration)
+    {
+
+    }
+
+    /**
+     * 
+     */
+    public function drop(string $table)
+    {
+
+    }
+
+    /**
      * @param array $fields
      * @param array $ailas
      * @return void
@@ -179,6 +203,30 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
         $this->query .= " GROUP BY " . $fields;
     }
 
+    public function delete(string $table)
+    {
+
+    }
+
+    /**
+     * @param string $table  - table to update
+     * @param array  $update - columns to update in a 2d array. structure should be [x][0] = column and [x][1] = value
+     */
+    public function update(string $table, array $updateDate)
+    {
+
+    }
+
+        /**
+     * @param string $table   - table to insert into
+     * @param array  $columns - columns to insert
+     * @param array  $values  - values to insert 
+     */
+    public function insert(string $table, array $columns, array $values)
+    {
+
+    }
+
     /**
      * Return the query as a string
      * @return string
@@ -187,7 +235,7 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
         return $this->query;
     }
 
-    public function clearQuery() : void {
+    public function emptyQuery() : void {
         $this->query = null;
     }
 }
