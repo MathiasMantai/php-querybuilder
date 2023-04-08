@@ -22,12 +22,14 @@ interface QueryBuilderInterface
     /**
      * @param array $columns - columns to select
      */
-    public function select(array $columns);
+    public function select(array $fields):void;
+
+    public function selectAll():void;
 
     /**
      * @param string $table - table to choose
      */
-    public function from(string $table);
+    public function from(string $table, string $alias);
 
     /**
      * @param string $where - where clause

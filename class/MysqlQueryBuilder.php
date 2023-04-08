@@ -172,7 +172,7 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
      *  @param string $alias
      *  @return void
      */
-    public function from(string $table, string $alias = null) : void {
+    public function from(string $table, string $alias = "") : void {
         $this->query .= " FROM " . $table;
 
         if($alias != null) {
