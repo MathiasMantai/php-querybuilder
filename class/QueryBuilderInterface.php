@@ -5,10 +5,9 @@ namespace Mmantai\QueryBuilder;
 interface QueryBuilderInterface 
 {
 
-    /**
-     * 
-     */
-    public function create(array $data);
+    public function createDB(string $dbName, bool $ifNotExists = false): void;
+
+    public function createTable($tableName, $ifNotExists, $tableData);
 
     /**
      * 

@@ -17,11 +17,100 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
     }
 
     /**
-     * 
+     * create a database 
+     * @param  string $dbName        database name
+     * @param  bool   $ifNotExists   "IF NOT EXISTS" clause for create statement
+     * @return void
      */
-    public function create(array $data)
+    public function createDB(string $dbName, bool $ifNotExists = false): void
     {
+        $this->query = "CREATE DATABASE ";
 
+        if($ifNotExists)
+            $this->query .= " IF NOT EXISTS ";
+
+        $this->query .= $dbName;
+    }
+
+    /**
+     * create a table 
+     * @param  string $tableName     table name
+     * @param  bool   $ifNotExists   "IF NOT EXISTS" clause for create statement
+     * @param  array  $attributes    attributes of new table; format is [attribute name, type, null/not null, comment, key constraint (syntax: [type, refTable, refAttribute] or false)]  
+     * @return void
+     */
+    public function createTable($tableName, $ifNotExists = false, $attributes)
+    {
+        $this->query = " CREATE TABLE ";
+        if($ifNotExists)
+            $this->query .= " IF NOT EXISTS ";
+        
+        $this->query .= $tableName;
+
+        //attributes
+        $this->query .= " ( ";
+
+        $cnt = count($attributes);
+        for($i = 0; $i < $cnt; $i++)
+        {
+            $this->query .= "{$attributes[$i][0]} {$attributes[$i][1]}";
+
+            $this->query .= " " . $this->nullable($attributes[$i][2]);
+
+            //comment
+            if(trim($attributes[$i][3]) != "")
+                $this->query .= " COMMENT '{$attributes[$i][3]}'";
+
+            //key constraints
+            if(gettype($attributes[$i][4]) == 'array')
+            {
+                switch($attributes[$i][4][0])
+                {
+                    case 0: $this->query .= ", " . $this->primaryKey($attributes[$i][0]);
+                    break;
+                    case 1: $this->query .= ", " . $this->foreignKey($attributes[$i][0], $attributes[$i][4][1], $attributes[$i][4][2]);
+                    break;
+                }
+            }
+
+            //separator
+            if($i < $cnt-1)
+                $this->query .= ", ";
+        }
+
+        $this->query .= " );";
+    }
+
+    /**
+     * is the attribute nullable
+     * @param  bool     $value   whether the attribute is nullable or not
+     * @return string
+     */
+    private function nullable($value): string
+    {
+        return $value ? "NULL" : "NOT NULL";
+    }
+
+    /**
+     * primary key constraint
+     * @param $keyName      name of primary key
+     * @return string
+     */
+    private function primaryKey($keyName): string
+    {
+        return " PRIMARY KEY({$keyName})";
+    }
+
+    /**
+     * foreign key constraint
+     * @param string $keyName       name of foreign key
+     * @param string $refTable      table referenced by foreign key
+     * @param string $refAttribute  attribute referenced by foreign key
+     * @return string
+     */
+    private function foreignKey($keyName, $refTable, $refAttribute): string
+    {
+        return " FOREIGN KEY({$keyName}) REFERENCES {$refTable} ({$refAttribute})";
     }
 
     /**
@@ -236,6 +325,6 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
     }
 
     public function emptyQuery() : void {
-        $this->query = null;
+        $this->query = "";
     }
 }
