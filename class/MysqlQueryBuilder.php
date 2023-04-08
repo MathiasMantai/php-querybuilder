@@ -130,25 +130,27 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
     }
 
     /**
-     * @param array $fields
-     * @param array $ailas
+     * SELECT statement
+     * @param array $fields     fields to select. to use an alias, use an array, e.g. [["field1", "f1"], "field2] will result in SELECT field1 AS f1, field2
      * @return void
-     * $fields = ["field1", "field2"]
-     * $alias = ["f1", "f2"]
-     * will result in the following query: SELECT field1 AS f1, field2 AS f2
      */    
-    public function select(array $fields, array $alias = null) : void {
+    public function select(array $fields) : void {
         $this->query .= "SELECT ";
 
         $count = count($fields);
 
         for($i = 0; $i < $count; $i++) {
 
-            $this->query .= $fields[$i];
-
-            if($alias != null && array_key_exists($i, $alias)) {
-                $this->query .= " AS " . $alias[$i];
+            if(gettype($fields[$i]) == 'array')
+            {
+                $this->query .= $fields[$i][0];
+                if(count($fields[$i]) == 2)
+                {
+                    $this->query .= " AS " . $fields[$i][1];
+                }
             }
+            else
+                $this->query .= $fields[$i];
 
             if($i < $count-1) {
                 $this->query .= ", ";
@@ -157,15 +159,12 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
     }
 
     /**
-     * @param string $table
-     * @param string $where
+     * select all (*)
      * @return void
      */    
-    public function selectAll(string $table, string $where = null): void {
-        $this->query .= "SELECT * FROM " . $table;
-        if($where != null) {
-            $this->query .= " WHERE " . $where;
-        }
+    public function selectAll(): void 
+    {
+        $this->query .= "SELECT * ";
     }
 
     /**

@@ -1,10 +1,10 @@
 # PHP Querybuilder
 This package provides classes to create sql queries for different databases
 
-# Supported
+## Supported
 - MySQL
 
-# Planned
+## Planned
 - PostgreSQL
 
 
