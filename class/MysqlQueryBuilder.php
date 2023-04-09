@@ -280,7 +280,8 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
      * @return void
      */
     public function orderBy(array $fields, string $order) : void {
-        $this->query .= " ORDER BY " . implode(",", $fields) . " " . $order;
+        if(count($fields) > 0)
+            $this->query .= " ORDER BY " . implode(",", $fields) . " " . $order;
     }
 
     /**
@@ -288,7 +289,8 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
      * @return void
      */
     public function groupBy(array $fields) : void {
-        $this->query .= " GROUP BY " . $fields;
+        if(count($fields) > 0)
+            $this->query .= " GROUP BY " . $fields;
     }
 
     public function delete(string $table)

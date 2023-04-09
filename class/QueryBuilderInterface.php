@@ -67,13 +67,13 @@ interface QueryBuilderInterface
      * @param string $table - table to join
      * @param string $on    - on clause for join
      */
-    public function groupBy(string $groupBy);
+    public function groupBy(array $groupBy);
 
     /**
      * @param string $table - table to join
      * @param string $on    - on clause for join
      */
-    public function orderBy(string $orderBy);
+    public function orderBy(array $orderBy, string $order);
 
     /**
      * @param string $table   - table to insert into
