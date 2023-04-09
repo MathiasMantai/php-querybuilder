@@ -262,17 +262,19 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
      * @param string $value
      * @return void
      */
-    public function where(string $field, string $operator = null, string $value = null) : void {
+    public function where(string $field, string $operator, string $value) : void 
+    {
+        $this->query .= " WHERE " . $field . " " . $operator . " " . $value;
+    }
 
-        $this->query .= " WHERE " . $field;
+    public function and(string $field, string $operator, string $value) : void 
+    {
+        $this->query .= " AND " . $field . " " . $operator . " " . $value;
+    }
 
-        if($operator != null) {
-            $this->query .= " " . $operator . " ";
-        }
-
-        if($value != null) {
-            $this->query .= " " . $value . " ";
-        }
+    public function or(string $field, string $operator, string $value) : void 
+    {
+        $this->query .= " OR " . $field . " " . $operator . " " . $value;
     }
 
     /**

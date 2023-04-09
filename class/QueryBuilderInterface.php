@@ -43,7 +43,7 @@ interface QueryBuilderInterface
     /**
      * @param string $where - where clause
      */
-    public function where(string $where);
+    public function where(string $field, string $operator, string $value) : void;
 
     /**
      * @param string $table - table to join
