@@ -279,15 +279,15 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
      * @param string $fields
      * @return void
      */
-    public function orderBy(string $fields) : void {
-        $this->query .= " ORDER BY " . $fields;
+    public function orderBy(array $fields, string $order) : void {
+        $this->query .= " ORDER BY " . implode(",", $fields) . " " . $order;
     }
 
     /**
      * @param string $fields
      * @return void
      */
-    public function groupBy(string $fields) : void {
+    public function groupBy(array $fields) : void {
         $this->query .= " GROUP BY " . $fields;
     }
 
