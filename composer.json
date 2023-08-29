@@ -1,9 +1,9 @@
 {
-    "name": "mmantai/query-builder",
+    "name": "m2/query-builder",
     "type": "library",
-    "description": "A simple php query builder",
+    "description": "A simple method based query builder",
     "license": "GPL-3.0-or-later",
     "autoload": {
-        "psr-4": {"Mmantai\\QueryBuilder\\": "class/"}
+        "psr-4": {"M2\\QueryBuilder\\": "class/"}
     }
 }

@@ -6,7 +6,9 @@
  * (at your option) any later version.
  */
 
-namespace Mmantai\QueryBuilder;
+namespace M2\QueryBuilder;
+
+use M2\QueryBuilder\QueryBuilderInterface;
 
 class MySQLQueryBuilder implements QueryBuilderInterface {
     
@@ -20,9 +22,8 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
      * create a database 
      * @param  string $dbName        database name
      * @param  bool   $ifNotExists   "IF NOT EXISTS" clause for create statement
-     * @return void
      */
-    public function createDB(string $dbName, bool $ifNotExists = false): void
+    public function createDB(string $dbName, bool $ifNotExists = false)
     {
         $this->query = "CREATE DATABASE ";
 
@@ -37,9 +38,8 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
      * @param  string $tableName     table name
      * @param  bool   $ifNotExists   "IF NOT EXISTS" clause for create statement
      * @param  array  $attributes    attributes of new table; format is [attribute name, type, null/not null, comment, key constraint (syntax: [type, refTable, refAttribute] or false)]  
-     * @return void
      */
-    public function createTable($tableName, $ifNotExists = false, $attributes)
+    public function createTable($tableName, $attributes, $ifNotExists = false)
     {
         $this->query = " CREATE TABLE ";
         if($ifNotExists)
@@ -132,9 +132,10 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
     /**
      * SELECT statement
      * @param array $fields     fields to select. to use an alias, use an array, e.g. [["field1", "f1"], "field2] will result in SELECT field1 AS f1, field2
-     * @return void
+
      */    
-    public function select(array $fields) : void {
+    public function select(array $fields) 
+    {
         $this->query .= "SELECT ";
 
         $count = count($fields);
@@ -156,37 +157,40 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
                 $this->query .= ", ";
             }
         } 
+
+        return $this;
     }
 
     /**
      * select all (*)
-     * @return void
      */    
-    public function selectAll(): void 
+    public function selectAll()
     {
         $this->query .= "SELECT * ";
+
+        return $this;
     }
 
     /**
      *  @param string $table
      *  @param string $alias
-     *  @return void
      */
-    public function from(string $table, string $alias = "") : void {
+    public function from(string $table, string $alias = "") {
         $this->query .= " FROM " . $table;
 
         if($alias != null) {
             $this->query .= " AS " . $alias;
         }
+
+        return $this;
     }
 
     /**
      *  @param string $table
      *  @param string $alias
      *  @param string $on
-     *  @return void
      */
-    public function innerJoin(string $table, string $alias = null, string $on = null) : void {
+    public function innerJoin(string $table, string $on = null, string $alias = null) {
         $this->query .= " INNER JOIN " . $table;
 
         if($alias != null) {
@@ -196,15 +200,16 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
         if($on != null) {
             $this->query .= " ON " . $on;
         }
+
+        return $this;
     }
 
     /**
      * @param string $table
      * @param string $alias
      * @param string $on
-     * @return void
      */
-    public function leftJoin(string $table, string $alias = null, string $on = null) : void {
+    public function leftJoin(string $table, string $on = null, string $alias = null) {
         $this->query .= " LEFT JOIN " . $table;
 
         if($alias != null) {
@@ -214,15 +219,16 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
         if($on != null) {
             $this->query .= " ON " . $on;
         }
+
+        return $this;
     }
 
     /**
      * @param string $table
      * @param string $alias
      * @param string $on
-     * @return void
      */
-    public function rightJoin(string $table, string $alias = null, string $on = null) : void {
+    public function rightJoin(string $table, string $on = null, string $alias = null) {
         $this->query .= " RIGHT JOIN " . $table;
 
         if($alias != null) {
@@ -232,72 +238,88 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
         if($on != null) {
             $this->query .= " ON " . $on;
         }
+
+        return $this;
     }
 
     /**
      * @param string $table
      * @param string $alias
-     * @return void
      */
-    public function fullJoin(string $table, string $alias = null) : void {
+    public function fullJoin(string $table, string $alias = null) {
         $this->query .= " FULL JOIN " . $table;
 
         if($alias != null) {
             $this->query .= " AS " . $alias;
         }
+
+        return $this;
     }
 
     /**
      * @param string $table
-     * @return void
      */
-    public function naturalJoin(string $table) : void {
+    public function naturalJoin(string $table)
+    {
         $this->query .= " NATURAL JOIN " . $table;
+
+        return $this;
     }
 
 
     /**
      * @param string $field
      * @param string $operator
-     * @param string $value
-     * @return void
+     * @param string|int|float|bool $value
+     * 
+     * @return [type]
      */
-    public function where(string $field, string $operator, string $value) : void 
+    public function where(string $field, string $operator, string|int|float|bool $value)
     {
         $this->query .= " WHERE " . $field . " " . $operator . " " . $value;
+
+        return $this;
     }
 
-    public function and(string $field, string $operator, string $value) : void 
+    public function and(string $field, string $operator, string|int|float|bool $value)
     {
         $this->query .= " AND " . $field . " " . $operator . " " . $value;
+
+        return $this;
     }
 
-    public function or(string $field, string $operator, string $value) : void 
+    public function or(string $field, string $operator, string|int|float|bool $value)
     {
         $this->query .= " OR " . $field . " " . $operator . " " . $value;
+
+        return $this;
     }
 
     /**
-     * @param string $fields
-     * @return void
+     * @param array $fields
      */
-    public function orderBy(array $fields, string $order) : void {
+    public function orderBy(array $fields, string $order)
+    {
         if(count($fields) > 0)
             $this->query .= " ORDER BY " . implode(",", $fields) . " " . $order;
+
+        return $this;
     }
 
     /**
-     * @param string $fields
-     * @return void
+     * @param array $fields
      */
-    public function groupBy(array $fields) : void {
+    public function groupBy(array $fields)
+    {
         if(count($fields) > 0)
-            $this->query .= " GROUP BY " . $fields;
+            $this->query .= " GROUP BY " . implode(",",$fields);
+        
+        return $this;
     }
 
     public function delete(string $table)
     {
-
+        return $this;
     }
 
     /**
@@ -306,28 +328,30 @@ class MySQLQueryBuilder implements QueryBuilderInterface {
      */
     public function update(string $table, array $updateDate)
     {
-
+        return $this;
     }
 
-        /**
+    /**
      * @param string $table   - table to insert into
      * @param array  $columns - columns to insert
      * @param array  $values  - values to insert 
      */
     public function insert(string $table, array $columns, array $values)
     {
-
+        return $this;
     }
 
     /**
      * Return the query as a string
      * @return string
      */
-    public function getQuery() : string {
+    public function get() : string 
+    {
         return $this->query;
     }
 
-    public function emptyQuery() : void {
+    public function empty()
+    {
         $this->query = "";
     }
 }

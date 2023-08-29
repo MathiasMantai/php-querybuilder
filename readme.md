@@ -6,6 +6,3 @@ This package provides classes to create sql queries for different databases
 
 ## Planned
 - PostgreSQL
-
-
-#
