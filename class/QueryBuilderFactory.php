@@ -1,12 +1,13 @@
 <?php
 
-namespace Mmantai\QueryBuilder;
-use Mmantai\QueryBuilder\MySQLQueryBuilder;
+namespace M2\QueryBuilder;
+
+use M2\QueryBuilder\MySQLQueryBuilder;
 
 
 class QueryBuilderFactory
 {
-    public static function createQueryBuilder($type)
+    public static function create($type)
     {
         switch($type)
         {
