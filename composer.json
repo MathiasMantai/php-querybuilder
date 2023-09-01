@@ -4,7 +4,9 @@
     "description": "A simple method based query builder",
     "license": "GPL-3.0-or-later",
     "autoload": {
-        "psr-4": {"MMantai\\QueryBuilder\\": "class/"}
+        "psr-4": {
+            "MMantai\\QueryBuilder\\": "class/"
+        }
     },
     "require-dev": {
         "phpunit/phpunit": "^10.3"
