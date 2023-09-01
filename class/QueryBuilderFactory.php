@@ -1,8 +1,8 @@
 <?php
 
-namespace M2\QueryBuilder;
+namespace MMantai\QueryBuilder;
 
-use M2\QueryBuilder\MySQLQueryBuilder;
+use MMantai\QueryBuilder\MySQLQueryBuilder;
 
 
 class QueryBuilderFactory

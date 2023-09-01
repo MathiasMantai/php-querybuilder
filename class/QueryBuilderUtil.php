@@ -1,6 +1,6 @@
 <?php
 
-namespace M2\QueryBuilder;
+namespace MMantai\QueryBuilder;
 
 trait QueryBuilderUtil
 {

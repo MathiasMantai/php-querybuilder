@@ -1,10 +1,10 @@
 {
-    "name": "m2/query-builder",
+    "name": "mmantai/query-builder",
     "type": "library",
     "description": "A simple method based query builder",
     "license": "GPL-3.0-or-later",
     "autoload": {
-        "psr-4": {"M2\\QueryBuilder\\": "class/"}
+        "psr-4": {"MMantai\\QueryBuilder\\": "class/"}
     },
     "require-dev": {
         "phpunit/phpunit": "^10.3"

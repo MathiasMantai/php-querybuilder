@@ -6,9 +6,9 @@
  * (at your option) any later version.
  */
 
-namespace M2\QueryBuilder;
+namespace MMantai\QueryBuilder;
 
-use M2\QueryBuilder\QueryBuilderUtil;
+use MMantai\QueryBuilder\QueryBuilderUtil;
 
 class MySQLQueryBuilder
 {
