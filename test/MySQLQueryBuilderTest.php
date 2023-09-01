@@ -77,4 +77,23 @@ final class MySQLQueryBuilderTest extends TestCase
     {
         $this->assertSame($expected, $actual);
     }
+
+
+    public static function updateDataProvider(): array
+    {
+        $builder = new MySQLQueryBuilder();
+
+        return [
+            [
+                "UPDATE tabelle SET spalte = 'Testspalte' WHERE rowid = 123456",
+                $builder->update("tabelle")->set("spalte", "Testspalte")->where("rowid", "=", 123456)->get()
+            ]
+            ];
+    }
+
+    #[DataProvider("updateDataProvider")]
+    public function testUpdateQueries(string $expected, string $actual): void
+    {
+        $this->assertSame($expected, $actual);
+    }
 }
