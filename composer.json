@@ -5,5 +5,8 @@
     "license": "GPL-3.0-or-later",
     "autoload": {
         "psr-4": {"M2\\QueryBuilder\\": "class/"}
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.3"
     }
 }

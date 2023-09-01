@@ -8,10 +8,12 @@
 
 namespace M2\QueryBuilder;
 
-use M2\QueryBuilder\QueryBuilderInterface;
+use M2\QueryBuilder\QueryBuilderUtil;
 
 class MySQLQueryBuilder
 {
+    use QueryBuilderUtil; 
+    
     private string $query;
 
     public function __construct() {
@@ -98,7 +100,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function addColumn(string $columnName, )
+    public function addColumn(string $columnName)
     {
         $this->query .= "ADD COLUMN ";
     }
@@ -151,12 +153,13 @@ class MySQLQueryBuilder
  
     public function selectAll()
     {
-        $this->query .= "SELECT * ";
+        $this->query .= "SELECT *";
 
         return $this;
     }
 
-    public function from(string $table, string $alias = "") {
+    public function from(string $table, string $alias = null) 
+    {
         $this->query .= " FROM " . $table;
 
         if($alias != null) {
@@ -166,49 +169,41 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function innerJoin(string $table, string $on = null, string $alias = null) {
+    public function innerJoin(string $table, string $alias = null) 
+    {
         $this->query .= " INNER JOIN " . $table;
 
         if($alias != null) {
             $this->query .= " AS " . $alias;
         }
 
-        if($on != null) {
-            $this->query .= " ON " . $on;
-        }
-
         return $this;
     }
 
-    public function leftJoin(string $table, string $on = null, string $alias = null) {
+    public function leftJoin(string $table, string $alias = null) 
+    {
         $this->query .= " LEFT JOIN " . $table;
 
         if($alias != null) {
             $this->query .= " AS " . $alias;
         }
 
-        if($on != null) {
-            $this->query .= " ON " . $on;
-        }
-
         return $this;
     }
 
-    public function rightJoin(string $table, string $on = null, string $alias = null) {
+    public function rightJoin(string $table, string $alias = null) 
+    {
         $this->query .= " RIGHT JOIN " . $table;
 
         if($alias != null) {
             $this->query .= " AS " . $alias;
         }
 
-        if($on != null) {
-            $this->query .= " ON " . $on;
-        }
-
         return $this;
     }
 
-    public function fullJoin(string $table, string $alias = null) {
+    public function fullJoin(string $table, string $alias = null) 
+    {
         $this->query .= " FULL JOIN " . $table;
 
         if($alias != null) {
@@ -218,15 +213,31 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function naturalJoin(string $table)
+    public function naturalJoin(string $table, string $alias = null)
     {
         $this->query .= " NATURAL JOIN " . $table;
+
+        if($alias != null) {
+            $this->query .= " AS " . $alias;
+        }
+
+        return $this;
+    }
+
+    public function on(string $column1, string $column2)
+    {
+        $this->query .= " ON " . $column1 . " = " . $column2;
 
         return $this;
     }
 
     public function where(string $field, string $operator, string|int|float|bool $value)
     {
+        if(gettype($value) == "string")
+        {
+            $value = $this->formatString($value);
+        }
+
         $this->query .= " WHERE " . $field . " " . $operator . " " . $value;
 
         return $this;
@@ -234,6 +245,11 @@ class MySQLQueryBuilder
 
     public function and(string $field, string $operator, string|int|float|bool $value)
     {
+        if(gettype($value) == "string")
+        {
+            $value = $this->formatString($value);
+        }
+
         $this->query .= " AND " . $field . " " . $operator . " " . $value;
 
         return $this;
@@ -241,15 +257,31 @@ class MySQLQueryBuilder
 
     public function or(string $field, string $operator, string|int|float|bool $value)
     {
+        if(gettype($value) == "string")
+        {
+            $value = $this->formatString($value);
+        }
+
         $this->query .= " OR " . $field . " " . $operator . " " . $value;
 
         return $this;
     }
 
-    public function orderBy(array $fields, string $order)
+    public function orderBy(array $fields, array $order)
     {
-        if(count($fields) > 0)
-            $this->query .= " ORDER BY " . implode(",", $fields) . " " . $order;
+        $cnt = count($fields);
+        $this->query .= " ORDER BY ";
+        //todo throw exception if fields and order arrays dont have the same length
+
+        for($i = 0; $i < $cnt; $i++)
+        {
+            $this->query .= $fields[$i] . (trim($order[$i]) != ""? " " . $order[$i] : "");
+
+            if($i < $cnt-1)
+            {
+                $this->query .= ", ";
+            }
+        }
 
         return $this;
     }
@@ -257,18 +289,34 @@ class MySQLQueryBuilder
     public function groupBy(array $fields)
     {
         if(count($fields) > 0)
-            $this->query .= " GROUP BY " . implode(",",$fields);
+            $this->query .= " GROUP BY " . implode(", ", $fields);
         
         return $this;
     }
 
     public function delete(string $table)
     {
+        $this->query .= "DELETE FROM " . $table;
+
         return $this;
     }
 
-    public function update(string $table, array $updateDate)
+    public function update(string $table)
     {
+        $this->query .= "UPDATE " . $table;
+
+        return $this;
+    }
+
+    public function set(string $column, string|bool|int|float $value)
+    {
+        if(gettype($value) == "string")
+        {
+            $value = $this->formatString($value);
+        }
+
+        $this->query .= "SET " . $column . " = " . (gettype($value) == "string" ? "'" . $value . "'" : $value);
+
         return $this;
     }
 
@@ -277,9 +325,18 @@ class MySQLQueryBuilder
         return $this;
     }
 
+    public function semicolon()
+    {
+        $this->query .= ";";
+
+        return $this;
+    }
+
     public function get() : string 
     {
-        return $this->query;
+        $res = $this->query;
+        $this->empty();
+        return $res;
     }
 
     public function empty()
