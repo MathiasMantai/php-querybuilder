@@ -315,9 +315,28 @@ class MySQLQueryBuilder
             $value = $this->formatString($value);
         }
 
-        $this->query .= "SET " . $column . " = " . (gettype($value) == "string" ? "'" . $value . "'" : $value);
+        $this->query .= " SET " . $column . " = " . $value;
 
         return $this;
+    }
+
+    public function setMulti(array $columns, array $values)
+    {
+        $cnt = count($columns);
+
+        //todo throw exception when length of $column and $values is not the same
+
+        for($i = 0; $i < $cnt; $i++)
+        {
+            $currentColumn = $columns[$i];
+            $currentValue = getType($values[$i]) == "string" ? $this->formatString($values[$i]) : $values[$i];
+            $this->query .= " SET " . $currentColumn . " = " . $currentValue;
+
+            if($i < $cnt - 1)
+            {
+                $this->query .= ", ";
+            }
+        }
     }
 
     public function insert(string $table, array $columns, array $values)
