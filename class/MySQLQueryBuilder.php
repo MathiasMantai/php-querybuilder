@@ -233,7 +233,7 @@ class MySQLQueryBuilder
 
     public function where(string $field, string $operator, string|int|float|bool $value)
     {
-        if(gettype($value) == "string")
+        if(gettype($value) == "string" && trim($value) != '?')
         {
             $value = $this->formatString($value);
         }
@@ -245,7 +245,7 @@ class MySQLQueryBuilder
 
     public function and(string $field, string $operator, string|int|float|bool $value)
     {
-        if(gettype($value) == "string")
+        if(gettype($value) == "string" && trim($value) != '?')
         {
             $value = $this->formatString($value);
         }
@@ -257,7 +257,7 @@ class MySQLQueryBuilder
 
     public function or(string $field, string $operator, string|int|float|bool $value)
     {
-        if(gettype($value) == "string")
+        if(gettype($value) == "string" && trim($value) != '?')
         {
             $value = $this->formatString($value);
         }
@@ -310,7 +310,7 @@ class MySQLQueryBuilder
 
     public function set(string $column, string|bool|int|float $value)
     {
-        if(gettype($value) == "string")
+        if(gettype($value) == "string" && trim($value) != '?')
         {
             $value = $this->formatString($value);
         }
@@ -329,7 +329,7 @@ class MySQLQueryBuilder
         for($i = 0; $i < $cnt; $i++)
         {
             $currentColumn = $columns[$i];
-            $currentValue = getType($values[$i]) == "string" ? $this->formatString($values[$i]) : $values[$i];
+            $currentValue = getType($values[$i]) == "string" && trim($values[$i]) != '?' ? $this->formatString($values[$i]) : $values[$i];
             $this->query .= $currentColumn . " = " . $currentValue;
 
             if($i < $cnt - 1)
