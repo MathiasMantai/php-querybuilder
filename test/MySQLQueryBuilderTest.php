@@ -87,12 +87,62 @@ final class MySQLQueryBuilderTest extends TestCase
             [
                 "UPDATE tabelle SET spalte = 'Testspalte' WHERE rowid = 123456",
                 $builder->update("tabelle")->set("spalte", "Testspalte")->where("rowid", "=", 123456)->get()
+            ],
+            [
+                "UPDATE tabelle SET name = 'Update', bla = 'Hallo Welt' WHERE rowid > 5",
+                $builder->update("tabelle")->setMulti(["name", "bla"], ['Update', 'Hallo Welt'])->where("rowid", ">", 5)->get()
             ]
-            ];
+        ];
     }
 
     #[DataProvider("updateDataProvider")]
     public function testUpdateQueries(string $expected, string $actual): void
+    {
+        $this->assertSame($expected, $actual);
+    }
+
+    public static function deleteDataProvider(): array
+    {
+        $builder = new MySQLQueryBuilder();
+
+        return [
+            [
+                "DELETE FROM tabelle WHERE rowid != 5 AND name LIKE '%dummy%'",
+                $builder->delete("tabelle")->where("rowid", "!=", 5)->and("name", "LIKE", "%dummy%")->get()
+            ],
+            [
+                "UPDATE tabelle SET name = 'Update', bla = 'Hallo Welt' WHERE rowid > 5",
+                $builder->update("tabelle")->setMulti(["name", "bla"], ['Update', 'Hallo Welt'])->where("rowid", ">", 5)->get()
+            ]
+        ];
+    }
+
+    #[DataProvider("deleteDataProvider")]
+    public function testDeleteQueries(string $expected, string $actual): void
+    {
+        $this->assertSame($expected, $actual);
+    }
+
+
+    //INSERT INTO
+    public static function insertDataProvider(): array
+    {
+        $builder = new MySQLQueryBuilder();
+
+        return [
+            [
+                "INSERT INTO tabelle (name, description, updated) VALUES ('test', 'This is an insert test', '')",
+                $builder->insert("tabelle", ["name", "description", "updated"], ['test', 'This is an insert test', ''])->get()
+            ],
+            [
+                "INSERT INTO t (rowid, name, ref) VALUES (58879, 'Testname', 'AB8600058')",
+                $builder->insert("t", ["rowid", "name", "ref"], [58879, "Testname", "AB8600058"])->get()
+            ]
+        ];
+    }
+
+    #[DataProvider("insertDataProvider")]
+    public function testInsertQueries(string $expected, string $actual): void
     {
         $this->assertSame($expected, $actual);
     }

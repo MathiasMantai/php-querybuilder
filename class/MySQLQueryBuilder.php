@@ -325,22 +325,38 @@ class MySQLQueryBuilder
         $cnt = count($columns);
 
         //todo throw exception when length of $column and $values is not the same
-
+        $this->query .= " SET ";
         for($i = 0; $i < $cnt; $i++)
         {
             $currentColumn = $columns[$i];
             $currentValue = getType($values[$i]) == "string" ? $this->formatString($values[$i]) : $values[$i];
-            $this->query .= " SET " . $currentColumn . " = " . $currentValue;
+            $this->query .= $currentColumn . " = " . $currentValue;
 
             if($i < $cnt - 1)
             {
                 $this->query .= ", ";
             }
         }
+
+        return $this;
     }
 
     public function insert(string $table, array $columns, array $values)
     {
+        array_walk($values, function(&$value) {
+            if(gettype($value) == "string")
+            {
+                $value = $this->formatString($value);
+
+                if(trim($value) == '')
+                {
+                    $value = "''";
+                }
+            }
+        });
+
+        $this->query .= "INSERT INTO " . $table . " (" . implode(", ", $columns) . ") VALUES (" . implode(", ", $values) . ")";
+
         return $this;
     }
 

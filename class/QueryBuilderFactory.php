@@ -12,7 +12,6 @@ class QueryBuilderFactory
         switch($type)
         {
             case "mysql": return new MySQLQueryBuilder();
-            break;
         }
     }
 }
