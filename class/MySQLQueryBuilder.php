@@ -344,7 +344,7 @@ class MySQLQueryBuilder
     public function insert(string $table, array $columns, array $values)
     {
         array_walk($values, function(&$value) {
-            if(gettype($value) == "string")
+            if(gettype($value) == "string" && trim($value) != '?')
             {
                 $value = $this->formatString($value);
 
