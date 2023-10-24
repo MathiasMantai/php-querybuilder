@@ -34,12 +34,14 @@ class PostgreSQLQueryBuilder
 
             foreach($options as $key => $value)
             {
-               $this->query .= "{strtoupper($key)} {$value}";
+                $key = strtoupper($key);
+                $this->query .= "{$key} {$value}";
             }
         }
 
         return $this;
     }
+
     public function semicolon()
     {
         $this->query .= ";";
