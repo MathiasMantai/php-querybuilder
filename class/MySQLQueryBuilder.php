@@ -28,6 +28,8 @@ class MySQLQueryBuilder
             $this->query .= " IF NOT EXISTS ";
 
         $this->query .= $dbName;
+
+        return $this;
     }
 
     public function createTable($tableName, $attributes, $ifNotExists = false)
