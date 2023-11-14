@@ -5,7 +5,7 @@ if(file_exists(__DIR__ . '/vendor/autoload.php'))
     require __DIR__ . '/vendor/autoload.php';
 }
 
-use MMantai\QueryBuilder\MySQLQueryBuilder;
+use Mmantai\QueryBuilder\MySQLQueryBuilder;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 

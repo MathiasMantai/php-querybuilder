@@ -6,9 +6,9 @@
  * (at your option) any later version.
  */
 
-namespace MMantai\QueryBuilder;
+namespace Mmantai\QueryBuilder;
 
-use MMantai\QueryBuilder\QueryBuilderUtil;
+use Mmantai\QueryBuilder\QueryBuilderUtil;
 
 class MySQLQueryBuilder
 {
@@ -72,6 +72,8 @@ class MySQLQueryBuilder
         }
 
         $this->query .= " );";
+
+        return $this;
     }
 
     private function nullable($value)

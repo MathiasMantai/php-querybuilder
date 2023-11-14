@@ -1,9 +1,9 @@
 <?php
 
-namespace MMantai\QueryBuilder;
+namespace Mmantai\QueryBuilder;
 
-use MMantai\QueryBuilder\MySQLQueryBuilder;
-use MMantai\QueryBuilder\PostgreSQLQueryBuilder;
+use Mmantai\QueryBuilder\MySQLQueryBuilder;
+use Mmantai\QueryBuilder\PostgreSQLQueryBuilder;
 
 class QueryBuilderFactory
 {
