@@ -16,7 +16,8 @@ class MySQLQueryBuilder
     
     private string $query;
 
-    public function __construct() {
+    public function __construct() 
+    {
         $this->query = "";
     }
 
@@ -76,21 +77,21 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    private function nullable($value): self
+    private function nullable(bool $value): self
     {
         $this->query .= $value ? "NULL" : "NOT NULL";
 
         return $this;
     }
 
-    private function primaryKey($keyName): self
+    private function primaryKey(string $keyName): self
     {
         $this->query .= " PRIMARY KEY({$keyName})";
 
         return $this;
     }
 
-    private function foreignKey($keyName, $refTable, $refAttribute): self
+    private function foreignKey(string $keyName, string $refTable, string $refAttribute): self
     {
         $this->query .= " FOREIGN KEY({$keyName}) REFERENCES {$refTable} ({$refAttribute})";
 
@@ -113,24 +114,26 @@ class MySQLQueryBuilder
 
     public function dropColumn(string $columnName): self
     {
-        $this->query .= "DROP COLUMN {$columnName}"
+        $this->query .= "DROP COLUMN {$columnName}";
+
+        return $this;
     }
 
-    public function dropTable(string $table)
+    public function dropTable(string $table): self
     {
         $this->query .= "DROP TABLE " . $table;
 
         return $this;
     }
 
-    public function dropDb(string $db)
+    public function dropDb(string $db): self
     {
         $this->query .= "DROP DATABASE " . $db;
 
         return $this;
     }
 
-    public function select(array $fields) 
+    public function select(array $fields): self
     {
         $this->query .= "SELECT ";
 
@@ -157,14 +160,14 @@ class MySQLQueryBuilder
         return $this;
     }
  
-    public function selectAll()
+    public function selectAll(): self
     {
         $this->query .= "SELECT *";
 
         return $this;
     }
 
-    public function from(string $table, string $alias = null) 
+    public function from(string $table, string $alias = null): self
     {
         $this->query .= " FROM " . $table;
 
@@ -175,7 +178,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function innerJoin(string $table, string $alias = null) 
+    public function innerJoin(string $table, string $alias = null): self
     {
         $this->query .= " INNER JOIN " . $table;
 
@@ -186,7 +189,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function leftJoin(string $table, string $alias = null) 
+    public function leftJoin(string $table, string $alias = null): self
     {
         $this->query .= " LEFT JOIN " . $table;
 
@@ -197,7 +200,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function rightJoin(string $table, string $alias = null) 
+    public function rightJoin(string $table, string $alias = null): self
     {
         $this->query .= " RIGHT JOIN " . $table;
 
@@ -208,7 +211,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function fullJoin(string $table, string $alias = null) 
+    public function fullJoin(string $table, string $alias = null): self
     {
         $this->query .= " FULL JOIN " . $table;
 
@@ -219,7 +222,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function naturalJoin(string $table, string $alias = null)
+    public function naturalJoin(string $table, string $alias = null): self
     {
         $this->query .= " NATURAL JOIN " . $table;
 
@@ -230,14 +233,14 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function on(string $column1, string $column2)
+    public function on(string $column1, string $column2): self
     {
         $this->query .= " ON " . $column1 . " = " . $column2;
 
         return $this;
     }
 
-    public function where(string $field, string $operator, string|int|float|bool $value)
+    public function where(string $field, string $operator, string|int|float|bool $value): self
     {
         if(gettype($value) == "string" && trim($value) != '?')
         {
@@ -249,7 +252,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function and(string $field, string $operator, string|int|float|bool $value)
+    public function and(string $field, string $operator, string|int|float|bool $value): self
     {
         if(gettype($value) == "string" && trim($value) != '?')
         {
@@ -261,7 +264,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function or(string $field, string $operator, string|int|float|bool $value)
+    public function or(string $field, string $operator, string|int|float|bool $value): self
     {
         if(gettype($value) == "string" && trim($value) != '?')
         {
@@ -273,7 +276,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function orderBy(array $fields, array $order)
+    public function orderBy(array $fields, array $order): self
     {
         $cnt = count($fields);
         $this->query .= " ORDER BY ";
@@ -292,7 +295,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function groupBy(array $fields)
+    public function groupBy(array $fields): self
     {
         if(count($fields) > 0)
             $this->query .= " GROUP BY " . implode(", ", $fields);
@@ -300,21 +303,21 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function delete(string $table)
+    public function delete(string $table): self
     {
         $this->query .= "DELETE FROM " . $table;
 
         return $this;
     }
 
-    public function update(string $table)
+    public function update(string $table): self
     {
         $this->query .= "UPDATE " . $table;
 
         return $this;
     }
 
-    public function set(string $column, string|bool|int|float $value)
+    public function set(string $column, string|bool|int|float $value): self
     {
         if(gettype($value) == "string" && trim($value) != '?')
         {
@@ -326,7 +329,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function setMulti(array $columns, array $values)
+    public function setMulti(array $columns, array $values): self
     {
         $cnt = count($columns);
 
@@ -347,7 +350,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function insert(string $table, array $columns, array $values)
+    public function insert(string $table, array $columns, array $values): self
     {
         array_walk($values, function(&$value) {
             if(gettype($value) == "string" && trim($value) != '?')
@@ -366,7 +369,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function semicolon()
+    public function semicolon(): self
     {
         $this->query .= ";";
 
@@ -380,7 +383,7 @@ class MySQLQueryBuilder
         return $res;
     }
 
-    public function empty()
+    public function empty(): void
     {
         $this->query = "";
     }
