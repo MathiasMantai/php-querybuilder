@@ -20,7 +20,7 @@ class MySQLQueryBuilder
         $this->query = "";
     }
 
-    public function createDB(string $dbName, bool $ifNotExists = false)
+    public function createDB(string $dbName, bool $ifNotExists = false): self
     {
         $this->query = "CREATE DATABASE ";
 
@@ -32,7 +32,7 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function createTable($tableName, $attributes, $ifNotExists = false)
+    public function createTable(string $tableName, array $attributes, bool $ifNotExists = false): self
     {
         $this->query = " CREATE TABLE ";
         if($ifNotExists)
@@ -76,42 +76,44 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    private function nullable($value)
+    private function nullable($value): self
     {
         $this->query .= $value ? "NULL" : "NOT NULL";
 
         return $this;
     }
 
-    private function primaryKey($keyName)
+    private function primaryKey($keyName): self
     {
         $this->query .= " PRIMARY KEY({$keyName})";
 
         return $this;
     }
 
-    private function foreignKey($keyName, $refTable, $refAttribute)
+    private function foreignKey($keyName, $refTable, $refAttribute): self
     {
         $this->query .= " FOREIGN KEY({$keyName}) REFERENCES {$refTable} ({$refAttribute})";
 
         return $this;
     }
 
-    public function alter(string $table)
+    public function alter(string $table): self
     {
         $this->query .= "ALTER TABLE " . $table;
 
         return $this;
     }
 
-    public function addColumn(string $columnName)
+    public function addColumn(string $columnName): self
     {
-        $this->query .= "ADD COLUMN ";
+        $this->query .= "ADD COLUMN {$columnName}";
+
+        return $this;
     }
 
-    public function dropColumn()
+    public function dropColumn(string $columnName): self
     {
-
+        $this->query .= "DROP COLUMN {$columnName}"
     }
 
     public function dropTable(string $table)
