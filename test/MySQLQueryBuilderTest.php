@@ -49,6 +49,8 @@ final class MySQLQueryBuilderTest extends TestCase
 
         $this->assertSame(" AND t4.spalte < 4", $builder->and("t4.spalte", "<", 4)->get());
         $this->assertSame(" AND t4.spalte != 'test2'", $builder->and("t4.spalte", "!=", "test2")->get());
+        $this->assertSame(" AND t4.spalte != false", $builder->and("t4.spalte", "!=", "false")->get());
+  
 
         $this->assertSame(" OR t5.spalte != 'THIS IS AND'", $builder->or("t5.spalte", "!=", "THIS IS AND")->get());
 

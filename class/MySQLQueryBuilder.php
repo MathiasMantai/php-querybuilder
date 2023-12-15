@@ -267,9 +267,9 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function where(string $field, string $operator, string|int|float|bool $value): self
+    public function where(string $field, string $operator, string|int|float $value): self
     {
-        if(gettype($value) == "string" && trim($value) != '?')
+        if(gettype($value) == "string" && trim($value) != '?' && strtoupper(trim($value)) != "FALSE" && strtoupper(trim($value)) != "TRUE")
         {
             $value = $this->formatString($value);
         }
@@ -281,7 +281,7 @@ class MySQLQueryBuilder
 
     public function and(string $field, string $operator, string|int|float|bool $value): self
     {
-        if(gettype($value) == "string" && trim($value) != '?')
+        if(gettype($value) == "string" && trim($value) != '?' && strtoupper(trim($value)) != "FALSE" && strtoupper(trim($value)) != "TRUE")
         {
             $value = $this->formatString($value);
         }
@@ -293,7 +293,7 @@ class MySQLQueryBuilder
 
     public function or(string $field, string $operator, string|int|float|bool $value): self
     {
-        if(gettype($value) == "string" && trim($value) != '?')
+        if(gettype($value) == "string" && trim($value) != '?' && strtoupper(trim($value)) != "FALSE" && strtoupper(trim($value)) != "TRUE")
         {
             $value = $this->formatString($value);
         }
