@@ -159,6 +159,33 @@ class MySQLQueryBuilder
 
         return $this;
     }
+
+    public function selectDistinct(array $fields): self
+    {
+        $this->query .= "SELECT DISTINCT ";
+
+        $count = count($fields);
+
+        for($i = 0; $i < $count; $i++) {
+
+            if(gettype($fields[$i]) == 'array')
+            {
+                $this->query .= $fields[$i][0];
+                if(count($fields[$i]) == 2)
+                {
+                    $this->query .= " AS " . $fields[$i][1];
+                }
+            }
+            else
+                $this->query .= $fields[$i];
+
+            if($i < $count-1) {
+                $this->query .= ", ";
+            }
+        } 
+
+        return $this;
+    }
  
     public function selectAll(): self
     {
