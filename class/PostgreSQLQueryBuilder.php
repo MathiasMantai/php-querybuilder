@@ -22,7 +22,7 @@ class PostgreSQLQueryBuilder
         $this->query = "";
     }
 
-    public function createDB(string $dbName, $options = [])
+    public function createDB(string $dbName, array $options = []): self
     {
         $this->query = "CREATE DATABASE ";
         $this->query .= $dbName;
@@ -41,7 +41,7 @@ class PostgreSQLQueryBuilder
         return $this;
     }
 
-    public function createTable($tableName, $attributes, $ifNotExists = false)
+    public function createTable(string $tableName, array $attributes, bool $ifNotExists = false): self
     {
         $this->query = " CREATE TABLE ";
         if($ifNotExists)
@@ -86,21 +86,21 @@ class PostgreSQLQueryBuilder
         return $this;
     }
 
-    private function primaryKey($keyName)
+    private function primaryKey(string $keyName): self
     {
         $this->query .= " PRIMARY KEY({$keyName})";
 
         return $this;
     }
 
-    private function foreignKey($keyName, $refTable, $refAttribute)
+    private function foreignKey(string $keyName, string $refTable, string $refAttribute): self
     {
         $this->query .= " FOREIGN KEY({$keyName}) REFERENCES {$refTable} ({$refAttribute})";
 
         return $this;
     }
 
-    private function nullable($value)
+    private function nullable(bool $value): self
     {
         $this->query .= $value ? "NULL" : "NOT NULL";
 
@@ -108,12 +108,276 @@ class PostgreSQLQueryBuilder
     }
 
 
-    public function semicolon()
+    public function semicolon(): self
     {
         $this->query .= ";";
 
         return $this;
     }
+
+    public function select(array $fields): self
+    {
+        $this->query .= "SELECT ";
+
+        $count = count($fields);
+
+        for($i = 0; $i < $count; $i++) {
+
+            if(gettype($fields[$i]) == 'array')
+            {
+                $this->query .= $fields[$i][0];
+                if(count($fields[$i]) == 2)
+                {
+                    $this->query .= " AS " . $fields[$i][1];
+                }
+            }
+            else
+                $this->query .= $fields[$i];
+
+            if($i < $count-1) {
+                $this->query .= ", ";
+            }
+        } 
+
+        return $this;
+    }
+
+    public function selectDistinct(array $fields): self
+    {
+        $this->query .= "SELECT DISTINCT ";
+
+        $count = count($fields);
+
+        for($i = 0; $i < $count; $i++) {
+
+            if(gettype($fields[$i]) == 'array')
+            {
+                $this->query .= $fields[$i][0];
+                if(count($fields[$i]) == 2)
+                {
+                    $this->query .= " AS " . $fields[$i][1];
+                }
+            }
+            else
+                $this->query .= $fields[$i];
+
+            if($i < $count-1) {
+                $this->query .= ", ";
+            }
+        } 
+
+        return $this;
+    }
+
+    public function selectAll(): self
+    {
+        $this->query .= "SELECT *";
+
+        return $this;
+    }
+
+    public function from(string $table, string|null $alias = null): self 
+    {
+        $this->query .= " FROM " . $table;
+
+        if($alias != null) {
+            $this->query .= " AS " . $alias;
+        }
+
+        return $this;
+    }
+
+    public function innerJoin(string $table, string $alias = null): self
+    {
+        $this->query .= " INNER JOIN " . $table;
+
+        if($alias != null) {
+            $this->query .= " AS " . $alias;
+        }
+
+        return $this;
+    }
+
+    public function leftJoin(string $table, string $alias = null): self
+    {
+        $this->query .= " LEFT JOIN " . $table;
+
+        if($alias != null) {
+            $this->query .= " AS " . $alias;
+        }
+
+        return $this;
+    }
+
+    public function rightJoin(string $table, string $alias = null): self
+    {
+        $this->query .= " RIGHT JOIN " . $table;
+
+        if($alias != null) {
+            $this->query .= " AS " . $alias;
+        }
+
+        return $this;
+    }
+
+    public function fullJoin(string $table, string $alias = null): self
+    {
+        $this->query .= " FULL JOIN " . $table;
+
+        if($alias != null) {
+            $this->query .= " AS " . $alias;
+        }
+
+        return $this;
+    }
+
+    public function naturalJoin(string $table, string $alias = null): self
+    {
+        $this->query .= " NATURAL JOIN " . $table;
+
+        if($alias != null) {
+            $this->query .= " AS " . $alias;
+        }
+
+        return $this;
+    }
+
+    public function on(string $column1, string $column2): self
+    {
+        $this->query .= " ON " . $column1 . " = " . $column2;
+
+        return $this;
+    }
+
+    public function where(string $field, string $operator, string|int|float $value): self
+    {
+        if(gettype($value) == "string" && trim($value) != '?' && strtoupper(trim($value)) != "FALSE" && strtoupper(trim($value)) != "TRUE")
+        {
+            $value = $this->formatString($value);
+        }
+
+        $this->query .= " WHERE " . $field . " " . $operator . " " . $value;
+
+        return $this;
+    }
+
+    public function and(string $field, string $operator, string|int|float|bool $value): self
+    {
+        if(gettype($value) == "string" && trim($value) != '?' && strtoupper(trim($value)) != "FALSE" && strtoupper(trim($value)) != "TRUE")
+        {
+            $value = $this->formatString($value);
+        }
+
+        $this->query .= " AND " . $field . " " . $operator . " " . $value;
+
+        return $this;
+    }
+
+    public function or(string $field, string $operator, string|int|float|bool $value): self
+    {
+        if(gettype($value) == "string" && trim($value) != '?' && strtoupper(trim($value)) != "FALSE" && strtoupper(trim($value)) != "TRUE")
+        {
+            $value = $this->formatString($value);
+        }
+
+        $this->query .= " OR " . $field . " " . $operator . " " . $value;
+
+        return $this;
+    }
+
+    public function orderBy(array $fields, array $order): self
+    {
+        $cnt = count($fields);
+        $this->query .= " ORDER BY ";
+        //todo throw exception if fields and order arrays dont have the same length
+
+        for($i = 0; $i < $cnt; $i++)
+        {
+            $this->query .= $fields[$i] . (trim($order[$i]) != ""? " " . $order[$i] : "");
+
+            if($i < $cnt-1)
+            {
+                $this->query .= ", ";
+            }
+        }
+
+        return $this;
+    }
+
+    public function groupBy(array $fields): self
+    {
+        if(count($fields) > 0)
+            $this->query .= " GROUP BY " . implode(", ", $fields);
+        
+        return $this;
+    }
+
+    public function delete(string $table): self
+    {
+        $this->query .= "DELETE FROM " . $table;
+
+        return $this;
+    }
+
+    public function update(string $table): self
+    {
+        $this->query .= "UPDATE " . $table;
+
+        return $this;
+    }
+
+    public function set(string $column, string|bool|int|float $value): self
+    {
+        if(gettype($value) == "string" && trim($value) != '?')
+        {
+            $value = $this->formatString($value);
+        }
+
+        $this->query .= " SET " . $column . " = " . $value;
+
+        return $this;
+    }
+
+    public function setMulti(array $columns, array $values): self
+    {
+        $cnt = count($columns);
+
+        //todo throw exception when length of $column and $values is not the same
+        $this->query .= " SET ";
+        for($i = 0; $i < $cnt; $i++)
+        {
+            $currentColumn = $columns[$i];
+            $currentValue = getType($values[$i]) == "string" && trim($values[$i]) != '?' ? $this->formatString($values[$i]) : $values[$i];
+            $this->query .= $currentColumn . " = " . $currentValue;
+
+            if($i < $cnt - 1)
+            {
+                $this->query .= ", ";
+            }
+        }
+
+        return $this;
+    }
+
+    public function insert(string $table, array $columns, array $values): self
+    {
+        array_walk($values, function(&$value) {
+            if(gettype($value) == "string" && trim($value) != '?')
+            {
+                $value = $this->formatString($value);
+
+                if(trim($value) == '')
+                {
+                    $value = "''";
+                }
+            }
+        });
+
+        $this->query .= "INSERT INTO " . $table . " (" . implode(", ", $columns) . ") VALUES (" . implode(", ", $values) . ")";
+
+        return $this;
+    }
+
 
     public function get() : string 
     {
@@ -122,7 +386,7 @@ class PostgreSQLQueryBuilder
         return $res;
     }
 
-    public function empty()
+    public function empty(): void
     {
         $this->query = "";
     }
