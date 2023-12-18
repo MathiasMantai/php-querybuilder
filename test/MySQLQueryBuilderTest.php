@@ -57,6 +57,10 @@ final class MySQLQueryBuilderTest extends TestCase
         $this->assertSame(" ORDER BY spalte1, spalte2 DESC, spalte3 ASC", $builder->orderBy(["spalte1", "spalte2", "spalte3"], ["", "DESC", "ASC"])->get());
 
         $this->assertSame(" GROUP BY spalte1, spalte2, spalte3", $builder->groupBy(["spalte1", "spalte2", "spalte3"])->get());
+
+        $this->assertSame(" UNION SELECT * FROM test2", $builder->union("test2")->get());
+
+        $this->assertSame(" UNION ALL SELECT * FROM test2", $builder->unionAll("test2")->get());
     }
 
     public static function selectDataProvider(): array

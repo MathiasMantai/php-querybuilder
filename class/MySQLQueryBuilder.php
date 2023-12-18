@@ -396,6 +396,54 @@ class MySQLQueryBuilder
         return $this;
     }
 
+    public function union(string $table, string $alias = null, array $fields = null): self
+    {
+        $this->query .= " UNION";
+
+        if($fields != null)
+        {
+            $fieldsConcat = implode(", ", $fields);
+            $this->query .= " SELECT {$fieldsConcat}";
+        }
+        else
+        {
+            $this->query .= " SELECT *";
+        }
+
+        $this->query .= " FROM {$table}";
+
+        if($alias != null)
+        {
+            $this->query .= " AS {$alias}";
+        }
+
+        return $this;
+    }
+
+    public function unionAll(string $table, string $alias = null, array $fields = null): self
+    {
+        $this->query .= " UNION ALL";
+
+        if($fields != null)
+        {
+            $fieldsConcat = implode(", ", $fields);
+            $this->query .= " SELECT {$fieldsConcat}";
+        }
+        else
+        {
+            $this->query .= " SELECT *";
+        }
+
+        $this->query .= " FROM {$table}";
+
+        if($alias != null)
+        {
+            $this->query .= " AS {$alias}";
+        }
+
+        return $this;
+    }
+
     public function semicolon(): self
     {
         $this->query .= ";";
