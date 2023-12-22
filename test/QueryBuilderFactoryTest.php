@@ -20,7 +20,7 @@ class QueryBuilderFactoryTest extends TestCase
     }
 
     #[DataProvider("objectDataProvider")]
-    public function testObjectFactory(MySQLQueryBuilder $expected, MySQLQueryBuilder $actual)
+    public function testObjectFactory(MySQLQueryBuilder $expected, MySQLQueryBuilder $actual): void
     {
         $this->assertObjectEquals($expected, $actual);
     }

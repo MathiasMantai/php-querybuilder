@@ -249,9 +249,17 @@ class MySQLQueryBuilder
         return $this;
     }
 
-    public function naturalJoin(string $table, string $alias = null): self
+    public function naturalJoin(string $table, string $alias = null, string $type = null): self
     {
-        $this->query .= " NATURAL JOIN " . $table;
+        $this->query .= " NATURAL ";
+
+        if($type != null && in_array(strtoupper($type), ["LEFT", "RIGHT", "INNER"]))
+        {
+            $type = strtoupper($type);
+            $this->query .= "{$type} ";
+        }
+
+        $this->query .= "JOIN {$table}";
 
         if($alias != null) {
             $this->query .= " AS " . $alias;
@@ -441,6 +449,30 @@ class MySQLQueryBuilder
             $this->query .= " AS {$alias}";
         }
 
+        return $this;
+    }
+    
+    public function intersect(string $type = null): self
+    {
+        $this->query .= " INTERSECT";
+
+        if($type != null && in_array(strtoupper($type), ["DISTINCT", "ALL"]))
+        {
+            $type = strtoupper($type);
+            $this->query .= " {$type}";
+        }
+        return $this;
+    }
+
+    public function except(string $type = null): self
+    {
+        $this->query .= " EXCEPT";
+
+        if($type != null && in_array(strtoupper($type), ["DISTINCT", "ALL"]))
+        {
+            $type = strtoupper($type);
+            $this->query .= " {$type}";
+        }
         return $this;
     }
 

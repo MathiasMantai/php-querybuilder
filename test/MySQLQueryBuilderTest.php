@@ -42,6 +42,10 @@ final class MySQLQueryBuilderTest extends TestCase
         $this->assertSame(" NATURAL JOIN table10 AS t10", $builder->naturalJoin("table10", "t10")->get());
         $this->assertSame(" NATURAL JOIN table11", $builder->naturalJoin("table11")->get());
 
+        $this->assertSame(" NATURAL LEFT JOIN table12 AS t12", $builder->naturalJoin("table12", "t12", "left")->get());
+        $this->assertSame(" NATURAL RIGHT JOIN table12 AS t12", $builder->naturalJoin("table12", "t12", "right")->get());
+        $this->assertSame(" NATURAL INNER JOIN table12 AS t12", $builder->naturalJoin("table12", "t12", "inner")->get());
+
         $this->assertSame(" ON t3.spalte = t4.spalte", $builder->on("t3.spalte", "t4.spalte")->get());
 
         $this->assertSame(" WHERE t3.spalte > 5", $builder->where("t3.spalte", ">", 5)->get());
@@ -61,6 +65,8 @@ final class MySQLQueryBuilderTest extends TestCase
         $this->assertSame(" UNION SELECT * FROM test2", $builder->union("test2")->get());
 
         $this->assertSame(" UNION ALL SELECT * FROM test2", $builder->unionAll("test2")->get());
+
+        $this->assertSame("SELECT * FROM table1 INTERSECT SELECT * FROM table2", $builder->selectAll()->from("table1")->intersect()->selectAll()->from("table2")->get());
     }
 
     public static function selectDataProvider(): array
