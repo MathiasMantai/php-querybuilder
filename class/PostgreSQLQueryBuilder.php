@@ -117,6 +117,11 @@ class PostgreSQLQueryBuilder
 
     public function select(array $fields): self
     {
+        if(trim($this->query) != "")
+        {
+            $this->query .= " ";
+        }
+        
         $this->query .= "SELECT ";
 
         $count = count($fields);
@@ -144,6 +149,11 @@ class PostgreSQLQueryBuilder
 
     public function selectDistinct(array $fields): self
     {
+        if(trim($this->query) != "")
+        {
+            $this->query .= " ";
+        }
+
         $this->query .= "SELECT DISTINCT ";
 
         $count = count($fields);
@@ -171,6 +181,11 @@ class PostgreSQLQueryBuilder
 
     public function selectAll(): self
     {
+        if(trim($this->query) != "")
+        {
+            $this->query .= " ";
+        }
+
         $this->query .= "SELECT *";
 
         return $this;
@@ -231,12 +246,68 @@ class PostgreSQLQueryBuilder
         return $this;
     }
 
-    public function naturalJoin(string $table, string $alias = null, string $type): self
+    public function naturalJoin(string $table, string $alias = null, string $type = null): self
     {
-        $this->query .= " NATURAL JOIN " . $table;
+        $this->query .= " NATURAL ";
+
+        if($type != null && in_array(strtoupper($type), ["LEFT", "RIGHT", "INNER"]))
+        {
+            $type = strtoupper($type);
+            $this->query .= "{$type} ";
+        }
+
+        $this->query .= "JOIN {$table}";
 
         if($alias != null) {
             $this->query .= " AS " . $alias;
+        }
+
+        return $this;
+    }
+
+    public function union(string $table, string $alias = null, array $fields = null): self
+    {
+        $this->query .= " UNION";
+
+        if($fields != null)
+        {
+            $fieldsConcat = implode(", ", $fields);
+            $this->query .= " SELECT {$fieldsConcat}";
+        }
+        else
+        {
+            $this->query .= " SELECT *";
+        }
+
+        $this->query .= " FROM {$table}";
+
+        if($alias != null)
+        {
+            $this->query .= " AS {$alias}";
+        }
+
+        return $this;
+    }
+
+    public function unionAll(string $table, string $alias = null, array $fields = null): self
+    {
+        $this->query .= " UNION ALL";
+
+        if($fields != null)
+        {
+            $fieldsConcat = implode(", ", $fields);
+            $this->query .= " SELECT {$fieldsConcat}";
+        }
+        else
+        {
+            $this->query .= " SELECT *";
+        }
+
+        $this->query .= " FROM {$table}";
+
+        if($alias != null)
+        {
+            $this->query .= " AS {$alias}";
         }
 
         return $this;
@@ -293,7 +364,7 @@ class PostgreSQLQueryBuilder
 
         for($i = 0; $i < $cnt; $i++)
         {
-            $this->query .= $fields[$i] . (trim($order[$i]) != ""? " " . $order[$i] : "");
+            $this->query .= $fields[$i] . (trim($order[$i]) != "" ? " " . $order[$i] : "");
 
             if($i < $cnt-1)
             {
