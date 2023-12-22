@@ -121,7 +121,7 @@ class PostgreSQLQueryBuilder
         {
             $this->query .= " ";
         }
-        
+
         $this->query .= "SELECT ";
 
         $count = count($fields);
@@ -310,6 +310,30 @@ class PostgreSQLQueryBuilder
             $this->query .= " AS {$alias}";
         }
 
+        return $this;
+    }
+
+    public function intersect(string $type = null): self
+    {
+        $this->query .= " INTERSECT";
+
+        if($type != null && in_array(strtoupper($type), ["DISTINCT", "ALL"]))
+        {
+            $type = strtoupper($type);
+            $this->query .= " {$type}";
+        }
+        return $this;
+    }
+
+    public function except(string $type = null): self
+    {
+        $this->query .= " EXCEPT";
+
+        if($type != null && in_array(strtoupper($type), ["DISTINCT", "ALL"]))
+        {
+            $type = strtoupper($type);
+            $this->query .= " {$type}";
+        }
         return $this;
     }
 
