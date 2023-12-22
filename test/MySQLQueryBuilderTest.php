@@ -67,6 +67,7 @@ final class MySQLQueryBuilderTest extends TestCase
         $this->assertSame(" UNION ALL SELECT * FROM test2", $builder->unionAll("test2")->get());
 
         $this->assertSame("SELECT * FROM table1 INTERSECT SELECT * FROM table2", $builder->selectAll()->from("table1")->intersect()->selectAll()->from("table2")->get());
+        $this->assertSame("SELECT * FROM table1 EXCEPT DISTINCT SELECT * FROM table2", $builder->selectAll()->from("table1")->except("distinct")->selectAll()->from("table2")->get());
     }
 
     public static function selectDataProvider(): array

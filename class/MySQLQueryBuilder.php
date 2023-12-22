@@ -135,6 +135,11 @@ class MySQLQueryBuilder
 
     public function select(array $fields): self
     {
+        if(trim($this->query) != "")
+        {
+            $this->query .= " ";
+        }
+        
         $this->query .= "SELECT ";
 
         $count = count($fields);
@@ -162,6 +167,11 @@ class MySQLQueryBuilder
 
     public function selectDistinct(array $fields): self
     {
+        if(trim($this->query) != "")
+        {
+            $this->query .= " ";
+        }
+
         $this->query .= "SELECT DISTINCT ";
 
         $count = count($fields);
@@ -189,6 +199,11 @@ class MySQLQueryBuilder
  
     public function selectAll(): self
     {
+        if(trim($this->query) != "")
+        {
+            $this->query .= " ";
+        }
+
         $this->query .= "SELECT *";
 
         return $this;
