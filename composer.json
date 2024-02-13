@@ -5,8 +5,7 @@
     "license": "GPL-3.0-or-later",
     "autoload": {
         "psr-4": {
-            "Mmantai\\QueryBuilder\\": "class/",
-            "Mmantai\\QueryBuilder\\Util\\": "util/"
+            "Mmantai\\QueryBuilder\\": "class/"
         }
     },
     "require-dev": {

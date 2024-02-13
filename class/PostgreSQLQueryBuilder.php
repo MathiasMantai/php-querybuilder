@@ -454,8 +454,14 @@ class PostgreSQLQueryBuilder
         return $this;
     }
 
-    public function insert(string $table, array $columns, array $values): self
+    public function insert(array $options): self
     {
+        $table   = $options["table"] ?? "";
+        $columns = $options["columns"] ?? [];
+        $values  = $options{"values"} ?? []; 
+        $useBindParam = $options["useBindParam"] ?? false;
+
+        //format strings
         array_walk($values, function(&$value) {
             if(gettype($value) == "string" && trim($value) != '?')
             {
@@ -468,11 +474,51 @@ class PostgreSQLQueryBuilder
             }
         });
 
-        $this->query .= "INSERT INTO " . $table . " (" . implode(", ", $columns) . ") VALUES (" . implode(", ", $values) . ")";
+
+        $this->query .= "INSERT INTO " . $table . " (" . implode(", ", $columns) . ") VALUES";
+
+        //loop over values and either print values or bind params comma separated 
+        $valueString = '';
+        $firstDim = $this->getFirstArrayDimension($values);
+
+        if($firstDim == 1)
+        {
+            $valueString = "(" . (implode(", ", $values)) . ")";
+        }
+        else if($firstDim == 2 && $this->arrayDimensionsMatch($values))
+        {
+            $cnt = count($values);
+            for($i = 0; $i < $cnt; $i++)
+            {
+                $valueString = "(" . (implode(", ", $values)) . ")";
+                if($i < $cnt - 1)
+                {
+                    $valueString .= ", ";
+                }
+            }
+        }
+        else
+        {
+            //throw exception
+        }
+
+        $this->query .= " {$valueString}";
 
         return $this;
     }
 
+    //TODO
+    public function json_agg(string $value)
+    {
+
+    }
+
+    public function json_object_agg()
+    {
+
+    }
+
+    //END TODO
 
     public function get() : string 
     {
