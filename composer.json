@@ -5,10 +5,18 @@
     "license": "GPL-3.0-or-later",
     "autoload": {
         "psr-4": {
-            "Mmantai\\QueryBuilder\\": "class/"
+            "Mmantai\\QueryBuilder\\": "class/",
+            "Mmantai\\QueryBuilder\\Util\\": "util/"
         }
     },
     "require-dev": {
         "phpunit/phpunit": "^10.3"
-    }
+    },
+    "authors": [
+        {
+            "name": "Mathias Mantai",
+            "email": "mathias.mantai@gmail.com",
+            "homepage": "https://mathiasmantai.de"
+        }
+    ]
 }
